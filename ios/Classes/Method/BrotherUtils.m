@@ -378,7 +378,7 @@ static NSObject<FlutterPluginRegistrar>* _registrarFlutter;
         return BRLMPrintSettingsResolutionNormal;
     }
     else if ([@"DOUBLE_SPEED" isEqualToString:name]) {
-        return BRLMPrintSettingsResolutionLow;
+        return BRLMPrintSettingsResolutionNormal;
     }
     else if ([@"HIGH_RESOLUTION" isEqualToString:name]) {
         return BRLMPrintSettingsResolutionHigh;
@@ -729,7 +729,7 @@ static NSObject<FlutterPluginRegistrar>* _registrarFlutter;
     
     printerSettings.labelSize = [BrotherUtils qlLabelSizeWithName:labelName];
     printerSettings.autoCut = [[map objectForKey:@"isAutoCut"] isEqual:@(YES)];
-    printerSettings.cutAtEnd = [[map objectForKey:@"isEndCut"] isEqual:@(YES)];
+    printerSettings.cutAtEnd = [[map objectForKey:@"isEndCut"] isEqual:@(YES)] || [[map objectForKey:@"isCutAtEnd"] isEqual:@(YES)];
     printerSettings.resolution = [BrotherUtils printResolutionFromMapWithValue:dartPrintQuality];
     
     // TODO Extract info from map.
