@@ -34,6 +34,12 @@
 
 @implementation AnotherBrotherPlugin
 
+// Print method calls do synchronous network I/O against the printer.
+// Run them off the main thread so the Flutter UI never freezes mid-print.
+static void ExecuteOnBackground(void (^block)(void)) {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
+}
+
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     
     // Track the registrar to get Asstes from.
@@ -50,16 +56,24 @@
       result([NSString stringWithFormat:@"iOS %@", UIDevice.currentDevice.systemVersion]);
   }
   else if ([[PrintFileMethodCall METHOD_NAME] isEqualToString:call.method]) {
-      [[[PrintFileMethodCall alloc] initWithCall:call result:result] execute];
+      ExecuteOnBackground(^{
+          [[[PrintFileMethodCall alloc] initWithCall:call result:result] execute];
+      });
   }
   else if ([[PrintImageMethodCall METHOD_NAME] isEqualToString:call.method]) {
-      [[[PrintImageMethodCall alloc] initWithCall:call result:result] execute];
+      ExecuteOnBackground(^{
+          [[[PrintImageMethodCall alloc] initWithCall:call result:result] execute];
+      });
   }
   else if ([[PrintFileListMethodCall METHOD_NAME] isEqualToString:call.method]) {
-      [[[PrintFileListMethodCall alloc] initWithCall:call result:result] execute];
+      ExecuteOnBackground(^{
+          [[[PrintFileListMethodCall alloc] initWithCall:call result:result] execute];
+      });
   }
   else if ([[PrintPdfFileMethodCall METHOD_NAME] isEqualToString:call.method]) {
-      [[[PrintPdfFileMethodCall alloc] initWithCall:call result:result] execute];
+      ExecuteOnBackground(^{
+          [[[PrintPdfFileMethodCall alloc] initWithCall:call result:result] execute];
+      });
   }
   else if ([[CancelMethodCall METHOD_NAME] isEqualToString:call.method]) {
       [[[CancelMethodCall alloc] initWithCall:call result:result] execute];
