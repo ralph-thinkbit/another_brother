@@ -26,7 +26,7 @@ static NSString * METHOD_NAME = @"printPdfFile";
     return METHOD_NAME;
 }
 - (void)execute {
-    // TODO Move to background thread.
+    // Runs on a background queue via ExecuteOnBackground in AnotherBrotherPlugin.m
     // Get printInfo dart params from call
     NSDictionary<NSString *, NSObject *> * dartPrintInfo = _call.arguments[@"printInfo"];
     // Get file path from call
