@@ -39,14 +39,16 @@ A new flutter plugin project.
   s.platform = :ios, '9.0'
 
   # Flutter.framework does not contain a i386 slice.
-  # - HEADER_SEARCH_PATHS makes `#import <BROTHERSDK/BROTHERSDK.h>` resolve to
-  #   the vendored header (the old resolution via BROTHERSDK.framework is gone).
-  # - OTHER_LDFLAGS -ObjC force-loads libBROTHERSDK.a into another_brother.framework.
+  # OTHER_LDFLAGS -ObjC force-loads the vendored libBROTHERSDK.a into
+  # another_brother.framework (the external BROTHERSDK pod dead-stripped it,
+  # yielding 'Undefined symbol: _OBJC_CLASS_$_BROTHERSDK' at app link).
+  # BROTHERSDK.h is vendored under Classes/ and imported with quotes so the
+  # import resolves inside the pod's own headers regardless of which target
+  # triggers the Clang module build.
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386',
     'OTHER_LDFLAGS' => '$(inherited) -ObjC',
-    'HEADER_SEARCH_PATHS' => '$(inherited) "${PODS_TARGET_SRCROOT}"',
   }
   s.swift_version = '5.0'
   

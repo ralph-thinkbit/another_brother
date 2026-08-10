@@ -3,6 +3,10 @@
 //  BROTHERSDK
 //
 
+// Vendored Type B SDK header. #pragma once: it is referenced both from the
+// pod's umbrella header and from AnotherBrotherPlugin.h.
+#pragma once
+
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 @interface BROTHERSDK : NSObject{
